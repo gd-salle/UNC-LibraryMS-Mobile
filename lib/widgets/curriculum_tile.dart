@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import '../models/department.dart';
+import '../route/app_routes.dart';
 
 class CurriculumTile extends StatefulWidget {
-  final Map<String, dynamic> course;
+  final Department department;
 
-  CurriculumTile({required this.course});
+  const CurriculumTile({Key? key, required this.department}) : super(key: key);
 
   @override
   _CurriculumTileState createState() => _CurriculumTileState();
@@ -17,11 +19,10 @@ class _CurriculumTileState extends State<CurriculumTile> {
     return Column(
       children: [
         ListTile(
-          title: Text(widget.course['title'],
-          style: TextStyle(
-            fontSize: 18, 
-            fontWeight:  FontWeight.bold,
-            fontFamily: 'League Spartan'),),
+          title: Text(
+            widget.department.name,
+            style: TextStyle(fontSize: 18),
+          ),
           trailing: TextButton(
             onPressed: () {
               setState(() {
@@ -30,40 +31,32 @@ class _CurriculumTileState extends State<CurriculumTile> {
             },
             child: Text(
               _isExpanded ? 'Minimize' : 'View Courses',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 11),
+              style: TextStyle(color: Colors.red, fontSize: 16),
             ),
           ),
         ),
-        if (_isExpanded && widget.course.containsKey('subjects'))
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: (widget.course['subjects'] as List<String>).map((subject) {
-                return ListTile(
-                  title: Text(
-                    subject,
-                    style: TextStyle(
-                      fontSize: 13, 
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'League Spartan')),
-                  trailing: TextButton(
-                    onPressed: () {
-                      // Implement view subjects action
-                    },
-                    child: Text(
-                      'View Subjects',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 11),
+        _isExpanded
+            ? Column(
+                children: widget.department.courses.map((course) {
+                  return ListTile(
+                    title: Text(course.name, style: TextStyle(fontSize: 16)),
+                    trailing: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.subjectDetailsPage,
+                          arguments: course,
+                        );
+                      },
+                      child: Text(
+                        'View Subjects',
+                        style: TextStyle(color: Colors.red, fontSize: 14),
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
+                  );
+                }).toList(),
+              )
+            : Container(),
         Divider(),
       ],
     );
