@@ -3,11 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
+    fontFamily: GoogleFonts.leagueSpartan().fontFamily,
     primarySwatch: Colors.red,
     textTheme: TextTheme(
-      headline6: GoogleFonts.leagueSpartan(),
-      bodyText2: GoogleFonts.leagueSpartan(),
-      button: GoogleFonts.leagueSpartan(),
+      headline6: TextStyle(fontWeight: FontWeight.bold),
     ),
   );
 }
