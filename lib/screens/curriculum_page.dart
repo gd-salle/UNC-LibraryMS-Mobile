@@ -1,61 +1,22 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import '../models/department.dart';
 import '../widgets/curriculum_tile.dart';
+import '../widgets/sidebar.dart';
 
-class CurriculumPage extends StatelessWidget {
-  final List<Map<String, dynamic>> courses = [
-    {
-      'title': 'Arts and Sciences',
-      'subjects': [
-        'Bachelor of Arts in Psychology',
-        'Bachelor of Arts in Political Science',
-        'Bachelor of Arts in Biology'
-      ]
-    },
-    {'title': 'Business and Accountancy',
-    'subjects': [
-        'Bachelor of Science in Accountancy',
-        'Bachelor of Science in Business Administration',
-        'Bachelor of Science in Entrepeneurship',
-        'Bachelor of Arts Hospitality Management'
-      ]
-    },
-    {'title': 'Computer Studies',
-    'subjects': [
-        'Associate in Computer Technology',
-        'Bachelor of Library and Information Science',
-        'Bachelor of Science in Information Technology',
-        'Bachelor of Science in Computer Science'
-      ]
-    },
-    {'title': 'Criminal Justice Education',
-    'subjects': [
-        'Bachelor of Science in Criminology',
-      ]
-    },
-    {'title': 'Education',
-    'subjects': [
-        'Bachelor of Elementary Education',
-        'Bachelor of Secondary Education',
-        'Bachelor of Physical Education'
-      ]
-    },
-    {'title': 'Engineering and Architecture',
-      'subjects': [
-        'Bachelor of Science in Architecture',
-        'Bachelor of Science in Computer Engineering',
-        'Bachelor of Science in Electrical Engineering',
-        'Bachelor of Science in Mechanical Engineering',
-        'Bachelor of Science in Civil Engineering',
-        'Bachelor of Science in Electronics Engineering'
-      ]
-    },
-    {'title': 'Nursing',
-      'subjects': [
-        'Bachelor of Science in Nursing',
-        'Caregiving NC II'
-      ]
-    },
-  ];
+class CurriculumPage extends StatefulWidget {
+  @override
+  _CurriculumPageState createState() => _CurriculumPageState();
+}
+
+class _CurriculumPageState extends State<CurriculumPage> {
+  Future<List<Department>>? _departments;
+
+  @override
+  void initState() {
+    super.initState();
+    _departments = ApiService.fetchDepartments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +38,17 @@ class CurriculumPage extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.red),
-            onPressed: () {
-              // Implement menu action
-            },
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: Colors.red),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
       ),
+      endDrawer: Sidebar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -93,26 +57,39 @@ class CurriculumPage extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  width: 10,
-                  height: 40,
+                  width: 5,
+                  height: 24,
                   color: Colors.red,
                 ),
                 SizedBox(width: 8),
                 Text(
                   'University Curriculum',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                    fontSize: 25, 
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'League Spartan'),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
-                itemCount: courses.length,
-                itemBuilder: (context, index) {
-                  return CurriculumTile(course: courses[index]);
+              child: FutureBuilder<List<Department>>(
+                future: _departments,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data == null) {
+                    return Center(child: Text('No data available'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return CurriculumTile(department: snapshot.data![index]);
+                      },
+                    );
+                  }
                 },
               ),
             ),
