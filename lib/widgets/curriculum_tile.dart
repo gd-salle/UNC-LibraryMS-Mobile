@@ -31,7 +31,7 @@ class _CurriculumTileState extends State<CurriculumTile> {
             },
             child: Text(
               _isExpanded ? 'Minimize' : 'View Courses',
-              style: TextStyle(color: Colors.red, fontSize: 16),
+              style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -50,7 +50,7 @@ class _CurriculumTileState extends State<CurriculumTile> {
                       },
                       child: Text(
                         'View Subjects',
-                        style: TextStyle(color: Colors.red, fontSize: 14),
+                        style: TextStyle(color: Colors.red, fontSize: 12,fontWeight: FontWeight.bold),
                       ),
                     ),
                   );

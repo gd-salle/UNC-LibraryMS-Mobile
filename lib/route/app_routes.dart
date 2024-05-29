@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/curriculum_page.dart';
-import '../screens/subject_details_page.dart';
+import '../screens/course_prospectus_page.dart';
 import '../models/course.dart';
 
 class AppRoutes {

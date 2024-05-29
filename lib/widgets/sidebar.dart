@@ -18,7 +18,7 @@ class Sidebar extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.indigo,
                 ),
                 SizedBox(height: 10),
                 Text(

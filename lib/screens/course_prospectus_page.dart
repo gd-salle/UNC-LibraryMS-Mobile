@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/course.dart';
-
+import '../widgets/sidebar.dart';
 class SubjectDetailsPage extends StatelessWidget {
   final Course course;
 
@@ -10,11 +10,15 @@ class SubjectDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+        leading: TextButton(
+          // icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
+          child: Text(
+            'Back',
+            style: TextStyle(color: Colors.red),
+          ),
         ),
         title: Center(
           child: Image.asset(
@@ -23,31 +27,42 @@ class SubjectDetailsPage extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.red),
-            onPressed: () {
-              // Implement menu action
-            },
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: Colors.red),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
       ),
+      endDrawer: Sidebar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Divider(
+            height: 20,
+            thickness: 2,
+            color: Colors.grey,
+          ),
             Row(
+              
               children: [
                 Container(
-                  width: 10,
-                  height: 30,
+                  width: 15,
+                  height: 60,
                   color: Colors.red,
                 ),
                 SizedBox(width: 8),
-                Text(
+                Expanded(
+                  child: Text(
                   course.name,
                   style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
+                )
               ],
             ),
             SizedBox(height: 20),
@@ -55,7 +70,7 @@ class SubjectDetailsPage extends StatelessWidget {
               return ListTile(
                 title: Text(
                   subject,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 trailing: TextButton(
                   onPressed: () {
@@ -63,7 +78,7 @@ class SubjectDetailsPage extends StatelessWidget {
                   },
                   child: Text(
                     'View Books',
-                    style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ),
               );

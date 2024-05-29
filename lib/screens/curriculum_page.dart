@@ -54,15 +54,21 @@ class _CurriculumPageState extends State<CurriculumPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Divider(
+            height: 20,
+            thickness: 2,
+            color: Colors.grey,
+          ),
             Row(
               children: [
                 Container(
-                  width: 5,
-                  height: 24,
+                  width: 15,
+                  height: 60,
                   color: Colors.red,
                 ),
                 SizedBox(width: 8),
                 Text(
+                  
                   'University Curriculum',
                   style: TextStyle(
                     fontSize: 24,
