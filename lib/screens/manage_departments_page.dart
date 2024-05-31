@@ -10,6 +10,7 @@ class ManageDepartmentsPage extends StatefulWidget {
 
 class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
   late Future<List<Department>> futureDepartments;
+  bool isModifyMode = false;
 
   @override
   void initState() {
@@ -21,14 +22,76 @@ class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
     showDialog(
       context: context,
       builder: (context) => AddDepartmentDialog(
-        onConfirm: (String departmentName) {
-          // Handle the add department functionality here
-          print('New Department: $departmentName');
-          Navigator.of(context).pop();
+        onConfirm: (String departmentName) async {
+          try {
+            await ApiService.addDepartment(departmentName);
+            setState(() {
+              futureDepartments = ApiService.fetchDepartments();
+            });
+            Navigator.of(context).pop();
+            _showSuccessDialog();
+          } catch (error) {
+            print('Error adding department: $error');
+            Navigator.of(context).pop();
+            _showErrorDialog(error.toString());
+          }
         },
       ),
     );
   }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Success'),
+        content: Text('The department has been successfully added.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  void _showErrorDialog(String error) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text('Failed to add department: $error'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _toggleModifyMode() {
+    setState(() {
+      isModifyMode = !isModifyMode;
+    });
+  }
+
+  // void _deleteDepartment(int departmentId) async {
+  //   try {
+  //     await ApiService.deleteDepartment(departmentId);
+  //     setState(() {
+  //       futureDepartments = ApiService.fetchDepartments();
+  //     });
+  //   } catch (error) {
+  //     print('Error deleting department: $error');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +171,26 @@ class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
                       return ListTile(
                         leading: Text(
                           (index + 1).toString(),
-                          style: TextStyle(color: Colors.red,fontSize: 16),
+                          style: TextStyle(color: Colors.red, fontSize: 16),
                         ),
                         title: Text(departments[index].name),
+                        trailing: isModifyMode
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () {}//=> _deleteDepartment(departments[index].id),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit, color: Colors.red),
+                                    onPressed: () {
+                                      // Implement edit functionality here
+                                    },
+                                  ),
+                                ],
+                              )
+                            : null,
                       );
                     },
                   );
@@ -124,9 +204,7 @@ class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
                   width: 180, // Adjust the width as needed
                   height: 40, // Adjust the height as needed
                   child: OutlinedButton(
-                    onPressed: () {
-                      // Implement modify functionality here
-                    },
+                    onPressed: _toggleModifyMode,
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Colors.red),
                       shape: RoundedRectangleBorder(
@@ -234,8 +312,8 @@ class AddDepartmentDialog extends StatelessWidget {
                   width: 140, // Adjust the width as needed
                   height: 40, // Adjust the height as needed
                   child: ElevatedButton(
-                    onPressed: (){
-                      ApiService.addDepartment(_controller.text);
+                    onPressed: () {
+                      onConfirm(_controller.text);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
