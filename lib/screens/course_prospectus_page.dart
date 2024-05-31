@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/course.dart';
 import '../widgets/sidebar.dart';
+
 class SubjectDetailsPage extends StatelessWidget {
   final Course course;
 
@@ -11,7 +12,6 @@ class SubjectDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: TextButton(
-          // icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -38,35 +38,58 @@ class SubjectDetailsPage extends StatelessWidget {
         ],
       ),
       endDrawer: Sidebar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Divider(
+                height: 20,
+                thickness: 2,
+                color: Colors.grey,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 15,
+                    height: 60,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      course.name,
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              ..._buildSubjectListByYear(course.subjects),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildSubjectListByYear(Map<String, List<String>> subjectsByYear) {
+    List<Widget> widgets = [];
+    subjectsByYear.forEach((year, subjects) {
+      widgets.add(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(
-            height: 20,
-            thickness: 2,
-            color: Colors.grey,
-          ),
-            Row(
-              
-              children: [
-                Container(
-                  width: 15,
-                  height: 60,
-                  color: Colors.red,
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                  course.name,
-                  style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                )
-              ],
+            Text(
+              year,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
-            ...course.subjects.map<Widget>((subject) {
+            SizedBox(height: 10),
+            ...subjects.map<Widget>((subject) {
               return ListTile(
                 title: Text(
                   subject,
@@ -78,14 +101,19 @@ class SubjectDetailsPage extends StatelessWidget {
                   },
                   child: Text(
                     'View Books',
-                    style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               );
             }).toList(),
+            SizedBox(height: 20),
           ],
         ),
-      ),
-    );
+      );
+    });
+    return widgets;
   }
 }

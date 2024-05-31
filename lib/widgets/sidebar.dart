@@ -1,5 +1,3 @@
-// lib/widgets/sidebar.dart
-
 import 'package:flutter/material.dart';
 
 class Sidebar extends StatelessWidget {
@@ -9,7 +7,7 @@ class Sidebar extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.white,
             ),
@@ -22,13 +20,13 @@ class Sidebar extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Student',
+                  'Adminstrator',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text('12-12345'),
+                Text('xx-xxxxx'),
               ],
             ),
           ),
@@ -36,7 +34,7 @@ class Sidebar extends StatelessWidget {
             leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () {
-              // Handle navigation
+              Navigator.pushNamed(context, '/home');
             },
           ),
           ListTile(
@@ -65,6 +63,13 @@ class Sidebar extends StatelessWidget {
             title: Text('Department Curriculum'),
             onTap: () {
               // Handle navigation
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.admin_panel_settings),
+            title: Text('Admin Control Panel'),
+            onTap: () {
+              Navigator.pushNamed(context, '/admin');
             },
           ),
           ListTile(
