@@ -57,7 +57,7 @@ class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
       ),
     );
   }
-  
+
   void _showErrorDialog(String error) {
     showDialog(
       context: context,
@@ -82,16 +82,27 @@ class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
     });
   }
 
-  // void _deleteDepartment(int departmentId) async {
-  //   try {
-  //     await ApiService.deleteDepartment(departmentId);
-  //     setState(() {
-  //       futureDepartments = ApiService.fetchDepartments();
-  //     });
-  //   } catch (error) {
-  //     print('Error deleting department: $error');
-  //   }
-  // }
+  void _editDepartment(int departmentId, String name) async{
+    try{
+      await ApiService.editDepartment(departmentId, name);
+      setState(() {
+        futureDepartments = ApiService.fetchDepartments();
+      });
+    } catch(error) {
+      print('Error deleting department: $error');
+    }
+  }
+
+  void _deleteDepartment(String name) async {
+    try {
+      await ApiService.deleteDepartment(name);
+      setState(() {
+        futureDepartments = ApiService.fetchDepartments();
+      });
+    } catch (error) {
+      print('Error deleting department: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +191,7 @@ class _ManageDepartmentsPageState extends State<ManageDepartmentsPage> {
                                 children: [
                                   IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () {}//=> _deleteDepartment(departments[index].id),
+                                    onPressed: () => _deleteDepartment(departments[index].name),
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.edit, color: Colors.red),
