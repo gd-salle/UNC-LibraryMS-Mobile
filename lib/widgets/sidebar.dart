@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../route/app_routes.dart'; // Add this import
 
 class Sidebar extends StatelessWidget {
   @override
@@ -69,7 +70,7 @@ class Sidebar extends StatelessWidget {
             leading: Icon(Icons.admin_panel_settings),
             title: Text('Admin Control Panel'),
             onTap: () {
-              Navigator.pushNamed(context, '/admin');
+              Navigator.pushNamed(context, AppRoutes.adminControlPanelPage); // Update this line
             },
           ),
           ListTile(
