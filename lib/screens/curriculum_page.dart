@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+import '../services/department_api_service.dart';
 import '../models/department.dart';
 import '../widgets/curriculum_tile.dart';
 import '../widgets/sidebar.dart';
@@ -15,7 +15,7 @@ class _CurriculumPageState extends State<CurriculumPage> {
   @override
   void initState() {
     super.initState();
-    _departments = ApiService.fetchDepartments();
+    _departments = DepartmentApiService.fetchDepartments();
   }
 
   @override
