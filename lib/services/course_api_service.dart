@@ -36,4 +36,14 @@ class CourseApiService {
       return false;
     }
   }
+
+  static Future<Course> fetchCourseById(int id) async {
+    final response = await http.get(Uri.parse('$apiUrl/course.php?id=$id'));
+
+    if (response.statusCode == 200) {
+      return Course.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load course');
+    }
+  }
 }
