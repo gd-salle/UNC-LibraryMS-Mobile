@@ -21,6 +21,7 @@ class _ManageSubjectsPageState extends State<ManageSubjectsPage> {
   TextEditingController searchController = TextEditingController();
   TextEditingController subjectNameController = TextEditingController();
   bool isLoading = true;
+  bool isModifyMode = false;
 
   @override
   void initState() {
@@ -179,6 +180,13 @@ class _ManageSubjectsPageState extends State<ManageSubjectsPage> {
     );
   }
 
+  void _toggleModifyMode() {
+    setState(() {
+      isModifyMode = !isModifyMode;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,8 +271,24 @@ class _ManageSubjectsPageState extends State<ManageSubjectsPage> {
                         return ListTile(
                           title: Text(subjects[index].name),
                           subtitle: Text('Year: ${subjects[index].year}'),
-
-                        );
+                          trailing: isModifyMode
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () {}//=> _showDeleteConfirmationDialog(departments[index].name),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit, color: Colors.red),
+                                    onPressed: () {
+                                      // _showEditDepartmentDialog(departments[index].name);
+                                    },
+                                  ),
+                                ],
+                              )
+                            : null,
+                      );
                       },
                     ),
                   ),
@@ -275,9 +299,7 @@ class _ManageSubjectsPageState extends State<ManageSubjectsPage> {
                         width: 180,
                         height: 40,
                         child: OutlinedButton(
-                          onPressed: () {
-                            // Implement Modify functionality
-                          },
+                          onPressed: _toggleModifyMode,
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(color: Colors.red),
                             shape: RoundedRectangleBorder(

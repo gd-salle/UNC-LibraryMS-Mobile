@@ -81,7 +81,7 @@ class ManageCurriculumPage extends StatelessWidget {
               title: Text('Manage Courses'),
               trailing: TextButton(
                 onPressed: () {
-                  // Implement navigation to manage courses screen
+                  Navigator.pushNamed(context, AppRoutes.manageCoursesPage);
                 },
                 child: Text(
                   'View',
@@ -96,7 +96,22 @@ class ManageCurriculumPage extends StatelessWidget {
               title: Text('Manage Subjects'),
               trailing: TextButton(
                 onPressed: () {
-                  // Implement navigation to manage subjects screen
+                  Navigator.pushNamed(context, AppRoutes.manageSubjectsPage);
+                },
+                child: Text(
+                  'View',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Manage Book References'),
+              trailing: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.manageReferencePage);
                 },
                 child: Text(
                   'View',
