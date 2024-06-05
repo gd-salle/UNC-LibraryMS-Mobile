@@ -38,7 +38,11 @@ dependencies:
   google_fonts: ^6.2.1
   sqflite: ^2.3.3+1
   http: ^1.2.1
+  google_books_api: any
 
+dependency_overrides:
+  http: ^1.2.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
